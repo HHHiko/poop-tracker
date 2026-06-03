@@ -73,12 +73,12 @@ function showModal(title, content, confirmText, cancelText, onConfirm) {
   } else {
     cancelBtn.style.display = 'none';
   }
-  document.getElementById('modal-overlay').className = 'overlay show';
+  document.getElementById('modal-overlay').className = 'modal-overlay show';
   modalCallback = onConfirm;
 }
 
 function hideModal() {
-  document.getElementById('modal-overlay').className = 'overlay';
+  document.getElementById('modal-overlay').className = 'modal-overlay';
   modalCallback = null;
 }
 
