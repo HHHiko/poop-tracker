@@ -30,6 +30,7 @@ html, body {
 .view {
   flex: 1;
   padding: 16px 20px;
+  padding-top: calc(16px + env(safe-area-inset-top, 0px));
   padding-bottom: 80px; /* 给底部导航留空间 */
   display: flex;
   flex-direction: column;
@@ -37,7 +38,7 @@ html, body {
 }
 
 #view-detail {
-  padding-bottom: 16px; /* 详情页无底部导航 */
+  padding-bottom: 40px; /* 详情页无底部导航，底部留出呼吸空间 */
 }
 
 /* ====== 底部导航 ====== */
@@ -67,9 +68,11 @@ html, body {
 .tab-item.active {
   color: #A1887F;
 }
-.tab-emoji {
-  font-size: 24px;
-  line-height: 1;
+.tab-icon {
+  width: 26px;
+  height: 26px;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
 }
 
 /* ====== Toast ====== */
@@ -385,9 +388,15 @@ html, body {
 .type-card.selected .type-desc {
   color: #FFFFFF;
 }
-.type-emoji {
-  font-size: 26px;
-  line-height: 1;
+.type-icon-img {
+  width: 44px;
+  height: 44px;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+  transition: transform 0.12s;
+}
+.type-card.selected .type-icon-img {
+  filter: brightness(0) invert(1);
 }
 .type-name {
   font-size: 13px;
@@ -685,8 +694,11 @@ html, body {
   gap: 6px;
   padding: 0 10px;
 }
-.record-icon {
-  font-size: 26px;
+.detail-record-icon {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
 }
 .record-type {
   font-size: 16px;
@@ -762,7 +774,7 @@ html, body {
   cursor: pointer;
 }
 
-/* 返回按钮（详情页用） */
+/* 返回按钮（详情页用）— 紧贴顶部安全区 */
 .back-btn {
   display: inline-flex;
   align-items: center;
@@ -771,14 +783,24 @@ html, body {
   color: #A1887F;
   font-weight: bold;
   margin-bottom: 12px;
+  margin-top: 0;
   cursor: pointer;
   background: #FFFFFF;
   border: 2px solid #2C2C2C;
   border-radius: 8px;
   padding: 6px 14px;
   box-shadow: 2px 2px 0 #2C2C2C;
+  width: fit-content;
 }
 .back-btn:active {
   box-shadow: 1px 1px 0 #2C2C2C;
   transform: translate(1px, 1px);
+}
+
+/* 图例像素画图标 */
+.legend-img {
+  width: 18px;
+  height: 18px;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
 }

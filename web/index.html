@@ -16,7 +16,7 @@
 <div id="app">
 
   <!-- ====== 月历页 ====== -->
-  <div class="view" id="view-calendar">
+  <div class="view" id="view-calendar" style="display:none">
     <div class="month-nav">
       <div class="nav-arrow" onclick="goPrevMonth()">〈</div>
       <div class="month-title" id="cal-title">2026年 6月</div>
@@ -42,7 +42,8 @@
   </div>
 
   <!-- ====== 记录页 ====== -->
-  <div class="view" id="view-record" style="display:none">
+  <div class="view" id="view-record">
+    <!-- ★ 改为记录页优先，去掉 display:none -->
     <div class="date-label" id="rec-date">📅 2026-06-03</div>
 
     <div class="section">
@@ -119,12 +120,12 @@
 
   <!-- ====== 底部导航 ====== -->
   <div id="tab-bar">
-    <div class="tab-item active" id="tab-calendar" onclick="switchTab('calendar')">
-      <span class="tab-emoji">📅</span>
+    <div class="tab-item" id="tab-calendar" onclick="switchTab('calendar')">
+      <img class="tab-icon" id="tab-img-cal" src="image/calendar.png" alt="月历">
       <span>月历</span>
     </div>
-    <div class="tab-item" id="tab-record" onclick="switchTab('record')">
-      <span class="tab-emoji">📝</span>
+    <div class="tab-item active" id="tab-record" onclick="switchTab('record')">
+      <img class="tab-icon" id="tab-img-rec" src="image/record-active.png" alt="记录">
       <span>记录</span>
     </div>
   </div>

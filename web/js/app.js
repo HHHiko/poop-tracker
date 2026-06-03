@@ -1,22 +1,22 @@
 // app.js — PWA 主控制器
-// 三视图 SPA：record（记录）、calendar（月历）、detail（详情）
+// 三视图 SPA：record（首页）、calendar（月历）、detail（详情）
 
 // ====== 全局配置 ======
 var stoolTypes = [
-  { value: 1, name: '棕色', color: '#A1887F', desc: '健康正常', emoji: '🟫' },
-  { value: 2, name: '绿色', color: '#81C784', desc: '消化较快', emoji: '🟢' },
-  { value: 3, name: '黄色', color: '#FFD54F', desc: '油脂偏多', emoji: '🟡' },
-  { value: 4, name: '深色', color: '#6D4C41', desc: '偏黑发暗', emoji: '🟤' },
-  { value: 5, name: '红色', color: '#EF5350', desc: '需留意',   emoji: '🔴' }
+  { value: 1, name: '棕色', color: '#A1887F', desc: '健康正常', img: 'image/brown.png' },
+  { value: 2, name: '绿色', color: '#81C784', desc: '消化较快', img: 'image/green.png' },
+  { value: 3, name: '黄色', color: '#FFD54F', desc: '油脂偏多', img: 'image/yellow.png' },
+  { value: 4, name: '深色', color: '#6D4C41', desc: '偏黑发暗', img: 'image/black.png' },
+  { value: 5, name: '红色', color: '#EF5350', desc: '需留意',   img: 'image/red.png' }
 ];
 
 // ====== 应用状态 ======
 var state = {
-  view: 'calendar',        // 'calendar' | 'record' | 'detail'
+  view: 'record',          // ★ 首页改为记录页
   history: [],             // 导航历史，用于返回
   // 月历
-  year: 2026,
-  month: 6,
+  year: 0,
+  month: 0,
   prediction: null,
   // 记录
   recordDate: '',
@@ -77,6 +77,11 @@ function showModal(title, content, confirmText, cancelText, onConfirm) {
   modalCallback = onConfirm;
 }
 
+function hideModal() {
+  document.getElementById('modal-overlay').className = 'overlay';
+  modalCallback = null;
+}
+
 // Modal 按钮绑定（在 initApp 中调用）
 function _setupModal() {
   document.getElementById('modal-confirm').addEventListener('click', function () {
@@ -99,7 +104,6 @@ function navigateTo(view, params) {
 
 function goBack() {
   if (state.history.length === 0) {
-    // 如果无历史，默认回到月历
     state.view = 'calendar';
   } else {
     state.view = state.history.pop();
@@ -127,11 +131,20 @@ function _updateUI() {
   document.getElementById('view-detail').style.display = v === 'detail' ? '' : 'none';
   // 底部导航栏：详情页不显示
   document.getElementById('tab-bar').style.display = v === 'detail' ? 'none' : '';
-  // Tab 高亮
+  // Tab 图标切换
   var calTab = document.getElementById('tab-calendar');
   var recTab = document.getElementById('tab-record');
-  if (calTab) calTab.className = 'tab-item' + (v === 'calendar' ? ' active' : '');
-  if (recTab) recTab.className = 'tab-item' + (v === 'record' ? ' active' : '');
+  if (v === 'calendar') {
+    calTab.className = 'tab-item active';
+    recTab.className = 'tab-item';
+    document.getElementById('tab-img-cal').src = 'image/calendar-active.png';
+    document.getElementById('tab-img-rec').src = 'image/record.png';
+  } else if (v === 'record') {
+    calTab.className = 'tab-item';
+    recTab.className = 'tab-item active';
+    document.getElementById('tab-img-cal').src = 'image/calendar.png';
+    document.getElementById('tab-img-rec').src = 'image/record-active.png';
+  }
 
   // 更新各视图内容
   if (v === 'calendar') _renderCalendarDOM();
@@ -149,8 +162,10 @@ function switchTab(tab) {
 
 // ====== 月历页 ======
 function _initCalendar() {
+  // ★ 修复：始终取当前显示的年月，首次调用时从今天取
   var now = new Date();
-  if (!state.year) { state.year = now.getFullYear(); state.month = now.getMonth() + 1; }
+  state.year = state.year || now.getFullYear();
+  state.month = state.month || (now.getMonth() + 1);
 }
 
 function _renderCalendarDOM() {
@@ -195,11 +210,9 @@ function _renderCalendarDOM() {
       var barHtml = '';
 
       if (idx < firstDayOfWeek) {
-        // 上月填充
         cellClass += ' prev';
         content = '<span class="day-num dimmed">' + (prevMonthDays - firstDayOfWeek + idx + 1) + '</span>';
       } else if (dayCounter > daysInMonth) {
-        // 下月填充
         cellClass += ' next';
         content = '<span class="day-num dimmed">' + (dayCounter - daysInMonth) + '</span>';
         dayCounter++;
@@ -215,9 +228,9 @@ function _renderCalendarDOM() {
         if (isPeriod) cellClass += ' period-day';
         if (isPredicted) cellClass += ' period-predicted';
 
-        content = '<span class="day-num' + (today ? '' : '') + '">' + dayCounter + '</span>';
+        content = '<span class="day-num">' + dayCounter + '</span>';
 
-        // 便便标记方块
+        // 便便标记方块（像素画缩略图）
         if (daySummary.length > 0) {
           content += '<div class="dots-row">';
           daySummary.forEach(function (t) {
@@ -227,7 +240,6 @@ function _renderCalendarDOM() {
           content += '</div>';
         }
 
-        // 经期/预测标记
         if (isPeriod) barHtml = '<div class="period-bar"></div>';
         else if (isPredicted) barHtml = '<div class="period-predicted-bar"></div>';
 
@@ -243,15 +255,13 @@ function _renderCalendarDOM() {
   }
 
   document.getElementById('cal-grid').innerHTML = html;
-
-  // 图例
   _renderLegend();
 }
 
 function _renderLegend() {
   var html = '';
   stoolTypes.forEach(function (t) {
-    html += '<div class="legend-item"><span class="legend-dot" style="background:' + t.color + '"></span><span class="legend-label">' + t.desc + '</span></div>';
+    html += '<div class="legend-item"><img class="legend-img" src="' + t.img + '" alt=""><span class="legend-label">' + t.desc + '</span></div>';
   });
   html += '<div class="legend-item"><span class="legend-dot period-legend"></span><span class="legend-label">经期</span></div>';
   if (state.prediction) {
@@ -292,15 +302,15 @@ function _initRecord(params) {
 }
 
 function _renderRecordDOM() {
-  document.getElementById('rec-date').textContent = '📅 ' + state.recordDate;
+  document.getElementById('rec-date').textContent = state.recordDate;
   document.getElementById('time-input').value = state.selectedTime || '';
 
-  // 渲染类型卡片
+  // 渲染类型卡片 — 使用像素画图标
   var cardsHtml = '';
   stoolTypes.forEach(function (t) {
     var sel = state.selectedType === t.value ? ' selected' : '';
     cardsHtml += '<div class="type-card' + sel + '" data-value="' + t.value + '" onclick="onTypeSelect(' + t.value + ')" style="--card-color:' + t.color + '">' +
-      '<span class="type-emoji">' + t.emoji + '</span>' +
+      '<img class="type-icon-img" src="' + t.img + '" alt="' + t.name + '">' +
       '<span class="type-name">' + t.name + '</span>' +
       '<span class="type-desc">' + t.desc + '</span>' +
     '</div>';
@@ -335,9 +345,7 @@ function onPeriodToggle() {
 
 function onTimeChange() {
   var val = document.getElementById('time-input').value;
-  if (val) {
-    state.selectedTime = val;
-  }
+  if (val) state.selectedTime = val;
 }
 
 function onToggleNote() {
@@ -363,12 +371,9 @@ function onSaveRecord() {
   });
 
   showToast('记录成功！', 'success', 1500);
-  setTimeout(function () {
-    goBack();
-  }, 800);
+  setTimeout(function () { goBack(); }, 800);
 }
 
-// 备注输入绑定（在 HTML 中 oninput）
 function onNoteInput(val) {
   state.note = val;
 }
@@ -385,12 +390,11 @@ function _renderDetailDOM() {
   var isPeriod = storage.isPeriodDay(date);
   var isEmpty = records.length === 0;
 
-  document.getElementById('detail-date-title').innerHTML = '📅 ' + date + (isPeriod ? '<span class="period-badge">🩸 经期</span>' : '');
+  document.getElementById('detail-date-title').innerHTML = date + (isPeriod ? '<span class="period-badge">🩸 经期</span>' : '');
   document.getElementById('detail-period-toggle').className = 'period-toggle ' + (isPeriod ? 'period-on' : 'period-off');
   document.getElementById('detail-period-icon').textContent = isPeriod ? '🩸' : '🩹';
   document.getElementById('detail-period-text').textContent = isPeriod ? '经期中 · 点击取消' : '标记为经期日';
 
-  // 记录列表
   var listEl = document.getElementById('detail-list');
   var emptyEl = document.getElementById('detail-empty');
 
@@ -401,10 +405,10 @@ function _renderDetailDOM() {
     emptyEl.style.display = 'none';
     var html = '';
     records.forEach(function (r) {
-      var t = stoolTypes[r.stoolType - 1] || { color: '#999', emoji: '❓', name: '未知' };
+      var t = stoolTypes[r.stoolType - 1] || { color: '#999', img: '', name: '未知' };
       html += '<div class="record-item" data-id="' + r.id + '">' +
         '<div class="record-left"><span class="dot" style="background:' + t.color + '"></span><span class="record-time">' + r.time + '</span></div>' +
-        '<div class="record-mid"><span class="record-icon">' + t.emoji + '</span><span class="record-type">' + t.name + '</span></div>' +
+        '<div class="record-mid"><img class="detail-record-icon" src="' + t.img + '" alt="' + t.name + '"><span class="record-type">' + t.name + '</span></div>' +
         '<div class="record-right">' +
           (r.note ? '<span class="record-note">' + r.note + '</span>' : '') +
           '<span class="delete-hint" onclick="onDeleteRecord(\'' + r.id + '\')">删除</span>' +
@@ -414,7 +418,6 @@ function _renderDetailDOM() {
     listEl.innerHTML = html;
   }
 
-  // 导出弹窗
   document.getElementById('export-sheet').style.display = state.showExportPicker ? '' : 'none';
 }
 
@@ -471,7 +474,6 @@ function onExportSelect(range) {
   state.showExportPicker = false;
   _renderDetailDOM();
 
-  // 创建下载
   var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
@@ -504,7 +506,6 @@ function onImportFile(file) {
 
 // ====== 初始化 ======
 function initApp() {
-  // 检查是否有数据，没有则插入示例
   var all = storage.getAllRecords();
   if (all.length === 0) {
     var today = formatDate(new Date());
@@ -512,8 +513,12 @@ function initApp() {
     storage.addRecord({ date: today, time: '14:00', stoolType: 3, note: '' });
   }
 
-  // 初始化月历并渲染
   _setupModal();
-  _initCalendar();
+  // 初始化月历（保证首次渲染时有正确的年月）
+  var now = new Date();
+  state.year = now.getFullYear();
+  state.month = now.getMonth() + 1;
+  // ★ 首页显示记录页
+  _initRecord(null);
   _updateUI();
 }
