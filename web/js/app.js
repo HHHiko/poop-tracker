@@ -85,8 +85,9 @@ function hideModal() {
 // Modal 按钮绑定（在 initApp 中调用）
 function _setupModal() {
   document.getElementById('modal-confirm').addEventListener('click', function () {
+    var cb = modalCallback;
     hideModal();
-    if (modalCallback) { var cb = modalCallback; modalCallback = null; cb(); }
+    if (cb) { modalCallback = null; cb(); }
   });
   document.getElementById('modal-cancel').addEventListener('click', hideModal);
   document.getElementById('modal-overlay').addEventListener('click', function (e) {
