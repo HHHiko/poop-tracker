@@ -210,6 +210,7 @@
   align-items: flex-end;
   gap: 6rpx;
   max-width: 200rpx;
+  flex: 1;
 }
 .record-note {
   font-size: 24rpx;
@@ -217,9 +218,30 @@
   text-align: right;
   word-break: break-all;
 }
-.delete-hint {
-  font-size: 20rpx;
-  color: #999999;
+
+/* 删除按钮 — 漫画风 */
+.delete-btn {
+  width: 64rpx;
+  height: 64rpx;
+  min-width: 64rpx;
+  background: #EF5350;
+  border: 3rpx solid #2C2C2C;
+  border-radius: 10rpx;
+  box-shadow: 3rpx 3rpx 0 #2C2C2C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 16rpx;
+  flex-shrink: 0;
+}
+.delete-icon {
+  font-size: 32rpx;
+  line-height: 1;
+}
+.delete-btn-pressed {
+  background: #C62828 !important;
+  box-shadow: 1rpx 1rpx 0 #2C2C2C !important;
+  transform: translate(2rpx, 2rpx);
 }
 
 /* ====== 导出弹窗 ====== */

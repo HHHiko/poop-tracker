@@ -49,10 +49,14 @@
         <text class="record-type">{{stoolTypes[item.stoolType - 1].name}}</text>
       </view>
 
-      <!-- 右侧：备注 + 删除 -->
+      <!-- 右侧：备注 -->
       <view class="record-right">
         <text class="record-note" wx:if="{{item.note}}">{{item.note}}</text>
-        <text class="delete-hint">长按删除</text>
+      </view>
+
+      <!-- 删除按钮 -->
+      <view class="delete-btn" data-id="{{item.id}}" catchtap="onDelete" hover-class="delete-btn-pressed">
+        <text class="delete-icon">🗑</text>
       </view>
     </view>
   </view>

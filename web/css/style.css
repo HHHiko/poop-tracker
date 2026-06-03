@@ -719,11 +719,31 @@ html, body {
   text-align: right;
   word-break: break-all;
 }
-.delete-hint {
-  font-size: 11px;
-  color: #EF5350;
+
+/* 删除按钮 — 漫画风红色按钮 */
+.delete-btn {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  background: #EF5350;
+  border: 2px solid #2C2C2C;
+  border-radius: 8px;
+  box-shadow: 2px 2px 0 #2C2C2C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  flex-shrink: 0;
   cursor: pointer;
-  font-weight: 700;
+}
+.delete-btn:active {
+  background: #C62828;
+  box-shadow: 1px 1px 0 #2C2C2C;
+  transform: translate(1px, 1px);
+}
+.delete-icon {
+  font-size: 18px;
+  line-height: 1;
 }
 
 /* 导出弹窗 */

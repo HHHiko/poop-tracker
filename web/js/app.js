@@ -411,7 +411,9 @@ function _renderDetailDOM() {
         '<div class="record-mid"><img class="detail-record-icon" src="' + t.img + '" alt="' + t.name + '"><span class="record-type">' + t.name + '</span></div>' +
         '<div class="record-right">' +
           (r.note ? '<span class="record-note">' + r.note + '</span>' : '') +
-          '<span class="delete-hint" onclick="onDeleteRecord(\'' + r.id + '\')">删除</span>' +
+        '</div>' +
+        '<div class="delete-btn" onclick="event.stopPropagation();onDeleteRecord(\'' + r.id + '\')">' +
+          '<span class="delete-icon">🗑</span>' +
         '</div>' +
       '</div>';
     });
