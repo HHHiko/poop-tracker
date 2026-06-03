@@ -1,0 +1,205 @@
+/* pages/record/record.wxss — 粗黑描边漫画风 */
+
+.page {
+  min-height: 100vh;
+  background-color: #EFEBE9;
+  padding: 32rpx 40rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ====== 日期 ====== */
+.date-label {
+  text-align: center;
+  font-size: 28rpx;
+  color: #2C2C2C;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  padding: 12rpx;
+  background: #FFFFFF;
+  border: 3rpx solid #2C2C2C;
+  border-radius: 12rpx;
+  box-shadow: 3rpx 3rpx 0 #2C2C2C;
+}
+
+/* ====== 区块 ====== */
+.section {
+  margin-bottom: 20rpx;
+}
+.section-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #2C2C2C;
+  margin-bottom: 12rpx;
+  text-align: center;
+}
+
+/* ====== 便便颜色卡片 — 紧凑网格 ====== */
+.type-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+.type-card {
+  width: calc(33.33% - 7rpx);
+  background: #FFFFFF;
+  border: 3rpx solid #2C2C2C;
+  border-radius: 12rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  padding: 14rpx 6rpx;
+  box-sizing: border-box;
+  box-shadow: 3rpx 3rpx 0 #2C2C2C;
+  transition: all 0.15s;
+}
+.type-card:active {
+  transform: translate(2rpx, 2rpx);
+  box-shadow: 1rpx 1rpx 0 #2C2C2C;
+}
+.type-card.selected {
+  border-color: var(--card-color);
+  background-color: var(--card-color);
+  box-shadow: 3rpx 3rpx 0 #2C2C2C;
+}
+.type-card.selected .type-icon {
+  transform: scale(1.15);
+}
+.type-card.selected .type-name,
+.type-card.selected .type-desc {
+  color: #FFFFFF;
+}
+.type-icon {
+  width: 48rpx;
+  height: 48rpx;
+  transition: transform 0.15s;
+}
+.type-name {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #2C2C2C;
+}
+.type-desc {
+  font-size: 20rpx;
+  color: #999999;
+}
+
+/* ====== 经期卡片 ====== */
+.period-card {
+  border-color: #F8BBD0;
+}
+.period-emoji {
+  font-size: 48rpx;
+  line-height: 48rpx;
+}
+.period-card.period-active {
+  background-color: #F48FB1;
+  border-color: #F48FB1;
+}
+.period-card.period-active .type-name,
+.period-card.period-active .type-desc {
+  color: #FFFFFF;
+}
+
+/* ====== 时间选择器 ====== */
+.time-picker-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  border: 3rpx solid #2C2C2C;
+  border-radius: 12rpx;
+  padding: 20rpx 20rpx;
+  box-shadow: 3rpx 3rpx 0 #2C2C2C;
+}
+.time-picker-btn:active {
+  background: #F5F5F5;
+  box-shadow: 1rpx 1rpx 0 #2C2C2C;
+  transform: translate(2rpx, 2rpx);
+}
+.time-text {
+  font-size: 32rpx;
+  color: #2C2C2C;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ====== 备注 ====== */
+.note-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  border: 3rpx solid #2C2C2C;
+  border-radius: 12rpx;
+  padding: 18rpx 20rpx;
+  font-size: 28rpx;
+  color: #666666;
+  box-shadow: 3rpx 3rpx 0 #2C2C2C;
+  font-weight: 500;
+  text-align: center;
+}
+.note-toggle:active {
+  background: #F5F5F5;
+  box-shadow: 1rpx 1rpx 0 #2C2C2C;
+  transform: translate(2rpx, 2rpx);
+}
+.toggle-arrow { font-size: 22rpx; }
+.note-area {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s;
+}
+.note-area.show {
+  max-height: 200rpx;
+  margin-top: 16rpx;
+}
+.note-input {
+  width: 100%;
+  background: #FFFFFF;
+  border: 3rpx solid #2C2C2C;
+  border-radius: 12rpx;
+  padding: 20rpx 24rpx;
+  font-size: 28rpx;
+  min-height: 100rpx;
+  box-sizing: border-box;
+  box-shadow: 3rpx 3rpx 0 #2C2C2C;
+}
+
+/* ====== 保存按钮 — 漫画风大按钮 ====== */
+.btn-save-wrap {
+  margin-top: 28rpx;
+}
+.btn-save {
+  width: 100%;
+  height: 96rpx;
+  background: #A1887F;
+  color: #FFFFFF;
+  font-size: 34rpx;
+  font-weight: bold;
+  border: 3rpx solid #2C2C2C;
+  border-radius: 12rpx;
+  box-shadow: 4rpx 4rpx 0 #2C2C2C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+}
+.btn-save-icon {
+  width: 44rpx;
+  height: 44rpx;
+}
+.btn-save-text {
+  color: #FFFFFF;
+  font-size: 34rpx;
+  font-weight: bold;
+}
+.btn-save-pressed {
+  background: #795548 !important;
+  box-shadow: 1rpx 1rpx 0 #2C2C2C !important;
+  transform: translate(3rpx, 3rpx);
+}

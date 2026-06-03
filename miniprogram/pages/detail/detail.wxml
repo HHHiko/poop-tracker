@@ -1,0 +1,75 @@
+<!-- pages/detail/detail.wxml — 日详情页 -->
+<view class="page">
+
+  <!-- 顶部栏 -->
+  <view class="top-bar">
+    <view class="date-title">📅 {{date}}<text class="period-badge" wx:if="{{isPeriod}}">🩸 经期</text></view>
+    <view class="top-actions">
+      <view class="action-btn import-btn" bindtap="onImport">📥 导入</view>
+      <view class="action-btn export-btn" bindtap="onExport">📤 导出</view>
+    </view>
+  </view>
+
+  <!-- 经期快速切换 — 一键标记/取消，无需跳转 -->
+  <view class="period-toggle {{isPeriod ? 'period-on' : 'period-off'}}" bindtap="onPeriodToggle" hover-class="period-toggle-pressed">
+    <text class="period-toggle-icon">{{isPeriod ? '🩸' : '🩹'}}</text>
+    <text class="period-toggle-text">{{isPeriod ? '经期中 · 点击取消' : '标记为经期日'}}</text>
+  </view>
+
+  <!-- 添加便便记录按钮 — 跳转记录页补录 -->
+  <view class="add-record-btn" bindtap="onAddRecord" hover-class="add-record-pressed">
+    <text class="add-record-icon">➕</text>
+    <text class="add-record-text">添加便便记录</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{isEmpty}}">
+    <text class="empty-emoji">📭</text>
+    <text class="empty-text">这天还没有记录</text>
+  </view>
+
+  <!-- 记录列表 -->
+  <view class="record-list" wx:else>
+    <view
+      class="record-item"
+      wx:for="{{records}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindlongpress="onDelete"
+    >
+      <!-- 左侧：时间 + 颜色标记 -->
+      <view class="record-left">
+        <view class="dot" style="background-color: {{stoolTypes[item.stoolType - 1].color}};"></view>
+        <text class="record-time">{{item.time}}</text>
+      </view>
+
+      <!-- 中间：类型信息 -->
+      <view class="record-mid">
+        <image class="record-icon" src="{{stoolTypes[item.stoolType - 1].icon}}" mode="aspectFit"></image>
+        <text class="record-type">{{stoolTypes[item.stoolType - 1].name}}</text>
+      </view>
+
+      <!-- 右侧：备注 + 删除 -->
+      <view class="record-right">
+        <text class="record-note" wx:if="{{item.note}}">{{item.note}}</text>
+        <text class="delete-hint">长按删除</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 导出选择弹窗 -->
+  <view class="overlay" wx:if="{{showExportPicker}}" bindtap="onExportCancel">
+    <view class="export-sheet" catchtap="">
+      <view class="sheet-title">选择导出范围</view>
+      <view
+        class="sheet-item"
+        wx:for="{{exportRanges}}"
+        wx:key="key"
+        data-range="{{item.key}}"
+        bindtap="onExportSelect"
+      >{{item.label}}</view>
+      <view class="sheet-cancel" bindtap="onExportCancel">取消</view>
+    </view>
+  </view>
+
+</view>

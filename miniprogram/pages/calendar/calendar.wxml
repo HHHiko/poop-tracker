@@ -1,0 +1,70 @@
+<!-- pages/calendar/calendar.wxml — 月历页 -->
+<view class="page">
+
+  <!-- 月份导航 -->
+  <view class="month-nav">
+    <view class="nav-arrow" bindtap="goPrevMonth">〈</view>
+    <view class="month-title">{{year}}年 {{month}}月</view>
+    <view class="nav-arrow" bindtap="goNextMonth">〉</view>
+  </view>
+
+  <!-- 星期头 -->
+  <view class="weekday-row">
+    <view class="weekday-cell" wx:for="{{weekdays}}" wx:key="*this">
+      <text class="weekday-text">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 日期网格 -->
+  <view class="calendar-grid">
+    <view class="week-row" wx:for="{{weeks}}" wx:key="index">
+      <view
+        class="day-cell {{item.month}} {{item.isToday ? 'today' : ''}} {{day.isPeriod ? 'period-day' : ''}} {{day.isPredicted ? 'period-predicted' : ''}}"
+        wx:for="{{item}}"
+        wx:for-item="day"
+        wx:key="col"
+        data-item="{{day}}"
+        bindtap="onDayTap"
+      >
+        <!-- 日期数字 -->
+        <text class="day-num {{day.month === 'current' ? '' : 'dimmed'}}">{{day.day}}</text>
+
+        <!-- 便便类型标记方块 -->
+        <view class="dots-row" wx:if="{{day.dots.length > 0}}">
+          <view
+            class="dot"
+            wx:for="{{day.dots}}"
+            wx:for-item="dot"
+            wx:key="dot"
+            style="background-color: {{stoolTypes[dot - 1].color}};"
+          ></view>
+        </view>
+
+        <!-- 经期标记：粉色小横条 -->
+        <view class="period-bar" wx:if="{{day.isPeriod}}"></view>
+        <!-- 预测经期：虚线横条 -->
+        <view class="period-predicted-bar" wx:if="{{day.isPredicted}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 图例：状态描述 -->
+  <view class="legend">
+    <text class="legend-title">状态说明：</text>
+    <view class="legend-items">
+      <view class="legend-item" wx:for="{{stoolTypes}}" wx:key="value">
+        <view class="legend-dot" style="background-color: {{item.color}};"></view>
+        <text class="legend-label">{{item.desc}}</text>
+      </view>
+      <view class="legend-item">
+        <view class="legend-dot period-legend"></view>
+        <text class="legend-label">经期</text>
+      </view>
+      <view class="legend-item" wx:if="{{prediction}}">
+        <view class="legend-dot period-predicted-legend"></view>
+        <text class="legend-label">预测经期</text>
+      </view>
+    </view>
+  </view>
+
+</view>

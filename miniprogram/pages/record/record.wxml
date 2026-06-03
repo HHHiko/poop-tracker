@@ -1,0 +1,72 @@
+<!-- pages/record/record.wxml — 记录页 -->
+<view class="page">
+
+  <!-- 日期显示 -->
+  <view class="date-label">📅 {{recordDate}}</view>
+
+  <!-- 类型选择：便便颜色 + 经期 -->
+  <view class="section">
+    <view class="section-title">记录类型</view>
+    <view class="type-grid">
+      <!-- 5 种便便颜色卡片 -->
+      <view
+        class="type-card {{selectedType === item.value ? 'selected' : ''}}"
+        wx:for="{{stoolTypes}}"
+        wx:key="value"
+        data-value="{{item.value}}"
+        bindtap="onTypeSelect"
+        style="--card-color: {{item.color}};"
+      >
+        <image class="type-icon" src="{{item.icon}}" mode="aspectFit"></image>
+        <text class="type-name">{{item.name}}</text>
+        <text class="type-desc">{{item.desc}}</text>
+      </view>
+
+      <!-- 第 6 格：经期标记 -->
+      <view
+        class="type-card period-card {{isPeriod ? 'period-active' : ''}}"
+        bindtap="onPeriodToggle"
+      >
+        <text class="type-icon period-emoji">{{periodEmoji}}</text>
+        <text class="type-name">{{periodName}}</text>
+        <text class="type-desc">{{isPeriod ? '已标记 ✕' : '点击标记'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 时间选择 -->
+  <view class="section">
+    <view class="section-title">🕐 便便时间</view>
+    <picker mode="time" value="{{selectedTime}}" bindchange="onTimeChange">
+      <view class="time-picker-btn">
+        <text class="time-text">{{selectedTime || '🕐 点击选择时间'}}</text>
+      </view>
+    </picker>
+  </view>
+
+  <!-- 备注（可折叠） -->
+  <view class="section">
+    <view class="note-toggle" bindtap="onToggleNote">
+      <text>{{showNote ? '📝 备注（点击收起 ▲）' : '📝 添加备注（可选 ▼）'}}</text>
+    </view>
+    <view class="note-area {{showNote ? 'show' : ''}}">
+      <textarea
+        class="note-input"
+        placeholder="吃了什么、感觉如何..."
+        value="{{note}}"
+        bindinput="onNoteInput"
+        maxlength="200"
+        auto-height
+      />
+    </view>
+  </view>
+
+  <!-- 保存按钮 -->
+  <view class="btn-save-wrap">
+    <view class="btn-save" bindtap="onSave" hover-class="btn-save-pressed">
+      <image class="btn-save-icon" src="/image/record.png" mode="aspectFit"></image>
+      <text class="btn-save-text">保存记录</text>
+    </view>
+  </view>
+
+</view>

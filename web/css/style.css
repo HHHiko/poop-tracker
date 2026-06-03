@@ -396,7 +396,8 @@ html, body {
   transition: transform 0.12s;
 }
 .type-card.selected .type-icon-img {
-  filter: brightness(0) invert(1);
+  transform: scale(1.08);
+  filter: brightness(0.85) drop-shadow(1px 1px 0 rgba(0,0,0,0.35)) drop-shadow(-1px -1px 0 rgba(0,0,0,0.25));
 }
 .type-name {
   font-size: 13px;

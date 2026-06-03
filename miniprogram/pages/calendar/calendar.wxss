@@ -1,0 +1,209 @@
+/* pages/calendar/calendar.wxss — 粗黑描边漫画风 */
+
+.page {
+  min-height: 100vh;
+  background-color: #EFEBE9;
+  padding: 32rpx 40rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ====== 月份导航 ====== */
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 0;
+  margin-bottom: 16rpx;
+}
+.nav-arrow {
+  width: 72rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  font-size: 40rpx;
+  color: #2C2C2C;
+  font-weight: bold;
+  background: #FFFFFF;
+  border: 3rpx solid #2C2C2C;
+  border-radius: 12rpx;
+  box-shadow: 3rpx 3rpx 0 #2C2C2C;
+}
+.nav-arrow:active {
+  background: #F0F0F0;
+  box-shadow: 1rpx 1rpx 0 #2C2C2C;
+  transform: translate(2rpx, 2rpx);
+}
+.month-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #2C2C2C;
+}
+
+/* ====== 星期头 ====== */
+.weekday-row {
+  display: flex;
+  margin-bottom: 4rpx;
+}
+.weekday-cell {
+  flex: 1;
+  text-align: center;
+  padding: 12rpx 0;
+}
+.weekday-text {
+  font-size: 26rpx;
+  color: #666666;
+  font-weight: 700;
+}
+
+/* ====== 日期网格 — 粗黑大框 ====== */
+.calendar-grid {
+  background: #FFFFFF;
+  border: 3rpx solid #2C2C2C;
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-shadow: 4rpx 4rpx 0 #2C2C2C;
+}
+.week-row {
+  display: flex;
+}
+.week-row:not(:last-child) {
+  border-bottom: 2rpx solid #2C2C2C;
+}
+
+.day-cell {
+  flex: 1;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 6rpx;
+  position: relative;
+  box-sizing: border-box;
+}
+.day-cell:not(:last-child) {
+  border-right: 2rpx solid #E8E8E8;
+}
+
+.day-cell.current {
+  /* 正常可点击 */
+}
+.day-cell.prev,
+.day-cell.next {
+  opacity: 0.25;
+}
+
+/* 今天高亮 */
+.day-cell.today {
+  background-color: #D7CCC8;
+}
+.day-cell.today .day-num {
+  color: #2C2C2C;
+  font-weight: bold;
+}
+
+.day-num {
+  font-size: 28rpx;
+  color: #2C2C2C;
+  font-weight: 500;
+}
+.day-num.dimmed {
+  color: #BDBDBD;
+}
+
+/* ====== 标记方块（像素风小方块代替圆点） ====== */
+.dots-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4rpx;
+  margin-top: 4rpx;
+  max-width: 80%;
+}
+.dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 2rpx;
+  border: 1rpx solid rgba(0,0,0,0.3);
+}
+
+/* ====== 经期标记 ====== */
+.period-bar {
+  width: 60%;
+  height: 6rpx;
+  background-color: #F48FB1;
+  border-radius: 3rpx;
+  margin-top: 4rpx;
+  border: 1rpx solid #E91E63;
+}
+
+/* ====== 预测经期标记 — 虚线风格区分 ====== */
+.day-cell.period-predicted {
+  background-color: rgba(244, 143, 177, 0.08);
+}
+.period-predicted-bar {
+  width: 60%;
+  height: 6rpx;
+  border-radius: 3rpx;
+  margin-top: 4rpx;
+  /* 用渐变模拟虚线 */
+  background: repeating-linear-gradient(
+    90deg,
+    #F48FB1 0rpx,
+    #F48FB1 8rpx,
+    transparent 8rpx,
+    transparent 14rpx
+  );
+}
+
+/* ====== 图例 ====== */
+.legend {
+  margin-top: 28rpx;
+  background: #FFFFFF;
+  border: 3rpx solid #2C2C2C;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  box-shadow: 4rpx 4rpx 0 #2C2C2C;
+}
+.legend-title {
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 16rpx;
+  font-weight: bold;
+}
+.legend-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx 24rpx;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+.legend-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 3rpx;
+  border: 2rpx solid #2C2C2C;
+}
+.legend-label {
+  font-size: 24rpx;
+  color: #2C2C2C;
+  font-weight: 500;
+}
+.period-legend {
+  background-color: #F48FB1;
+}
+.period-predicted-legend {
+  background: repeating-linear-gradient(
+    90deg,
+    #F48FB1 0rpx,
+    #F48FB1 4rpx,
+    transparent 4rpx,
+    transparent 8rpx
+  );
+}

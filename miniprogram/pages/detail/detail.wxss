@@ -1,0 +1,265 @@
+/* pages/detail/detail.wxss — 粗黑描边漫画风 */
+
+.page {
+  min-height: 100vh;
+  background-color: #EFEBE9;
+  padding: 32rpx 40rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ====== 顶部栏 ====== */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+.date-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #2C2C2C;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.period-badge {
+  font-size: 22rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+  background-color: #F48FB1;
+  border: 2rpx solid #2C2C2C;
+  border-radius: 8rpx;
+  padding: 4rpx 12rpx;
+  box-shadow: 2rpx 2rpx 0 #2C2C2C;
+}
+.top-actions {
+  display: flex;
+  gap: 12rpx;
+}
+.action-btn {
+  font-size: 26rpx;
+  padding: 10rpx 20rpx;
+  border-radius: 10rpx;
+  background: #FFFFFF;
+  color: #A1887F;
+  border: 3rpx solid #2C2C2C;
+  box-shadow: 3rpx 3rpx 0 #2C2C2C;
+  font-weight: bold;
+}
+.action-btn:active {
+  background: #EFEBE9;
+  box-shadow: 1rpx 1rpx 0 #2C2C2C;
+  transform: translate(2rpx, 2rpx);
+}
+
+/* ====== 经期快速切换按钮 ====== */
+.period-toggle {
+  width: 100%;
+  height: 72rpx;
+  border: 3rpx solid #2C2C2C;
+  border-radius: 12rpx;
+  box-shadow: 4rpx 4rpx 0 #2C2C2C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  margin-bottom: 16rpx;
+  font-weight: bold;
+}
+.period-toggle.period-on {
+  background: #F48FB1;
+  color: #FFFFFF;
+}
+.period-toggle.period-off {
+  background: #FFFFFF;
+  color: #F48FB1;
+}
+.period-toggle-icon {
+  font-size: 32rpx;
+}
+.period-toggle-text {
+  font-size: 28rpx;
+  font-weight: bold;
+}
+.period-toggle-pressed.period-on {
+  background: #EC407A !important;
+  box-shadow: 1rpx 1rpx 0 #2C2C2C !important;
+  transform: translate(3rpx, 3rpx);
+}
+.period-toggle-pressed.period-off {
+  background: #FCE4EC !important;
+  box-shadow: 1rpx 1rpx 0 #2C2C2C !important;
+  transform: translate(3rpx, 3rpx);
+}
+
+/* ====== 添加记录按钮 ====== */
+.add-record-btn {
+  width: 100%;
+  height: 80rpx;
+  background: #A1887F;
+  color: #FFFFFF;
+  border: 3rpx solid #2C2C2C;
+  border-radius: 12rpx;
+  box-shadow: 4rpx 4rpx 0 #2C2C2C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  margin-bottom: 24rpx;
+  font-weight: bold;
+}
+.add-record-icon {
+  font-size: 32rpx;
+}
+.add-record-text {
+  font-size: 30rpx;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+.add-record-pressed {
+  background: #795548 !important;
+  box-shadow: 1rpx 1rpx 0 #2C2C2C !important;
+  transform: translate(3rpx, 3rpx);
+}
+
+/* ====== 空状态 ====== */
+.empty-state {
+  text-align: center;
+  padding-top: 120rpx;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.empty-emoji {
+  font-size: 100rpx;
+  display: block;
+  margin-bottom: 24rpx;
+}
+.empty-text {
+  font-size: 32rpx;
+  color: #666666;
+  display: block;
+  font-weight: bold;
+}
+
+/* ====== 记录列表 ====== */
+.record-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+.record-item {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border: 3rpx solid #2C2C2C;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  box-shadow: 3rpx 3rpx 0 #2C2C2C;
+}
+.record-item:active {
+  background: #F5F5F5;
+}
+
+.record-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  min-width: 80rpx;
+}
+.record-left .dot {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 4rpx;
+  border: 2rpx solid #2C2C2C;
+}
+.record-time {
+  font-size: 26rpx;
+  color: #2C2C2C;
+  font-weight: 700;
+}
+
+.record-mid {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  padding: 0 16rpx;
+}
+.record-icon {
+  width: 48rpx;
+  height: 48rpx;
+}
+.record-type {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #2C2C2C;
+}
+
+.record-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6rpx;
+  max-width: 200rpx;
+}
+.record-note {
+  font-size: 24rpx;
+  color: #666666;
+  text-align: right;
+  word-break: break-all;
+}
+.delete-hint {
+  font-size: 20rpx;
+  color: #999999;
+}
+
+/* ====== 导出弹窗 ====== */
+.overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+}
+.export-sheet {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 20rpx 20rpx 0 0;
+  border-top: 3rpx solid #2C2C2C;
+  padding: 32rpx 32rpx 48rpx;
+  box-shadow: 0 -4rpx 0 #2C2C2C;
+}
+.sheet-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #2C2C2C;
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+.sheet-item {
+  text-align: center;
+  font-size: 32rpx;
+  color: #2C2C2C;
+  font-weight: 500;
+  padding: 28rpx 0;
+  border-bottom: 2rpx solid #2C2C2C;
+}
+.sheet-item:active { background: #F5F5F5; color: #A1887F; }
+.sheet-cancel {
+  text-align: center;
+  font-size: 30rpx;
+  color: #999;
+  font-weight: 500;
+  padding: 28rpx 0;
+  margin-top: 12rpx;
+}

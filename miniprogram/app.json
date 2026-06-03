@@ -1,0 +1,37 @@
+{
+  "pages": [
+    "pages/record/record",
+    "pages/calendar/calendar",
+    "pages/detail/detail"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#A1887F",
+    "navigationBarTitleText": "便便记录",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#EFEBE9"
+  },
+  "tabBar": {
+    "color": "#757575",
+    "selectedColor": "#A1887F",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "position": "bottom",
+    "list": [
+      {
+        "pagePath": "pages/record/record",
+        "text": "记录",
+        "iconPath": "image/record.png",
+        "selectedIconPath": "image/record-active.png"
+      },
+      {
+        "pagePath": "pages/calendar/calendar",
+        "text": "月历",
+        "iconPath": "image/calendar.png",
+        "selectedIconPath": "image/calendar-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
