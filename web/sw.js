@@ -1,6 +1,6 @@
 // sw.js — Service Worker（离线缓存）
 
-var CACHE = 'poop-tracker-v1';
+var CACHE = 'poop-tracker-v2';
 var FILES = [
   './index.html',
   './css/style.css',
@@ -34,21 +34,21 @@ self.addEventListener('activate', function (e) {
   );
 });
 
-// 请求：缓存优先，网络回退
+// 请求：网络优先，缓存回退（确保每次更新立即可见）
 self.addEventListener('fetch', function (e) {
   e.respondWith(
-    caches.match(e.request).then(function (cached) {
-      return cached || fetch(e.request).then(function (res) {
-        // 只缓存成功响应
-        if (res && res.status === 200) {
-          var clone = res.clone();
-          caches.open(CACHE).then(function (cache) {
-            cache.put(e.request, clone);
-          });
-        }
-        return res;
-      }).catch(function () {
-        // 网络不可用时，返回缓存（如果有的话）
+    fetch(e.request).then(function (res) {
+      // 缓存成功响应
+      if (res && res.status === 200) {
+        var clone = res.clone();
+        caches.open(CACHE).then(function (cache) {
+          cache.put(e.request, clone);
+        });
+      }
+      return res;
+    }).catch(function () {
+      // 网络不可用时，使用缓存
+      return caches.match(e.request).then(function (cached) {
         return cached || new Response('离线状态', { status: 503 });
       });
     })
