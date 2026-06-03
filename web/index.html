@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="便便记录">
+  <meta name="theme-color" content="#A1887F">
+  <title>便便记录助手</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ====== 月历页 ====== -->
+  <div class="view" id="view-calendar">
+    <div class="month-nav">
+      <div class="nav-arrow" onclick="goPrevMonth()">〈</div>
+      <div class="month-title" id="cal-title">2026年 6月</div>
+      <div class="nav-arrow" onclick="goNextMonth()">〉</div>
+    </div>
+
+    <div class="weekday-row">
+      <div class="weekday-cell"><span class="weekday-text">日</span></div>
+      <div class="weekday-cell"><span class="weekday-text">一</span></div>
+      <div class="weekday-cell"><span class="weekday-text">二</span></div>
+      <div class="weekday-cell"><span class="weekday-text">三</span></div>
+      <div class="weekday-cell"><span class="weekday-text">四</span></div>
+      <div class="weekday-cell"><span class="weekday-text">五</span></div>
+      <div class="weekday-cell"><span class="weekday-text">六</span></div>
+    </div>
+
+    <div class="calendar-grid" id="cal-grid"></div>
+
+    <div class="legend">
+      <div class="legend-title">状态说明：</div>
+      <div class="legend-items" id="legend-items"></div>
+    </div>
+  </div>
+
+  <!-- ====== 记录页 ====== -->
+  <div class="view" id="view-record" style="display:none">
+    <div class="date-label" id="rec-date">📅 2026-06-03</div>
+
+    <div class="section">
+      <div class="section-title">记录类型</div>
+      <div class="type-grid" id="type-grid"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🕐 便便时间</div>
+      <div class="time-picker-btn">
+        <input type="time" id="time-input" onchange="onTimeChange()" class="time-input-native">
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="note-toggle" onclick="onToggleNote()">
+        <span id="note-toggle-text">📝 添加备注（可选 ▼）</span>
+      </div>
+      <div id="note-area" style="display:none">
+        <textarea class="note-input" id="note-input" placeholder="吃了什么、感觉如何..." maxlength="200" oninput="onNoteInput(this.value)"></textarea>
+      </div>
+    </div>
+
+    <div class="btn-save-wrap">
+      <div class="btn-save" onclick="onSaveRecord()">
+        <span>💾</span>
+        <span>保存记录</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 详情页 ====== -->
+  <div class="view" id="view-detail" style="display:none">
+    <div class="back-btn" onclick="goBack()">← 返回</div>
+
+    <div class="top-bar">
+      <div class="date-title" id="detail-date-title">📅 2026-06-03</div>
+      <div class="top-actions">
+        <div class="action-btn" onclick="onImport()">📥 导入</div>
+        <div class="action-btn" onclick="onExport()">📤 导出</div>
+      </div>
+    </div>
+
+    <div class="period-toggle" id="detail-period-toggle" onclick="onDetailPeriodToggle()">
+      <span class="period-toggle-icon" id="detail-period-icon">🩹</span>
+      <span class="period-toggle-text" id="detail-period-text">标记为经期日</span>
+    </div>
+
+    <div class="add-record-btn" onclick="onDetailAddRecord()">
+      <span class="add-record-icon">➕</span>
+      <span class="add-record-text">添加便便记录</span>
+    </div>
+
+    <div class="empty-state" id="detail-empty">
+      <span class="empty-emoji">📭</span>
+      <span class="empty-text">这天还没有记录</span>
+    </div>
+
+    <div class="record-list" id="detail-list"></div>
+
+    <!-- 导出弹窗 -->
+    <div id="export-sheet" style="display:none">
+      <div class="export-overlay" onclick="onExportCancel()">
+        <div class="export-sheet" onclick="event.stopPropagation()">
+          <div class="sheet-title">选择导出范围</div>
+          <div class="sheet-item" onclick="onExportSelect('1m')">最近 1 个月</div>
+          <div class="sheet-item" onclick="onExportSelect('3m')">最近 3 个月</div>
+          <div class="sheet-item" onclick="onExportSelect('all')">全部记录</div>
+          <div class="sheet-cancel" onclick="onExportCancel()">取消</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 底部导航 ====== -->
+  <div id="tab-bar">
+    <div class="tab-item active" id="tab-calendar" onclick="switchTab('calendar')">
+      <span class="tab-emoji">📅</span>
+      <span>月历</span>
+    </div>
+    <div class="tab-item" id="tab-record" onclick="switchTab('record')">
+      <span class="tab-emoji">📝</span>
+      <span>记录</span>
+    </div>
+  </div>
+
+  <!-- ====== Toast ====== -->
+  <div class="toast" id="toast">
+    <span id="toast-icon"></span>
+    <span id="toast-msg"></span>
+  </div>
+
+  <!-- ====== Modal ====== -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-content" id="modal-content"></div>
+      <div class="modal-actions">
+        <button class="modal-btn" id="modal-cancel">取消</button>
+        <button class="modal-btn confirm" id="modal-confirm">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 隐藏的文件选择器（导入用） -->
+  <input type="file" id="import-file" accept=".csv" style="display:none" onchange="onImportFile(this.files[0])">
+
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/app.js"></script>
+<script>
+  // 注册 Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+  // 直接启动（此时 DOM 已就绪，因为脚本在 body 末尾）
+  initApp();
+</script>
+
+</body>
+</html>
