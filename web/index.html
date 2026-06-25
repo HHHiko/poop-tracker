@@ -35,6 +35,23 @@
 
     <div class="calendar-grid" id="cal-grid"></div>
 
+    <!-- 日预览面板 -->
+    <div class="day-preview" id="day-preview" style="display:none">
+      <div class="preview-header">
+        <div class="preview-close" onclick="onDeselectDate()">✕</div>
+        <span class="preview-date" id="preview-date-text"></span>
+        <span class="preview-hint">点击日期切换</span>
+      </div>
+      <div class="preview-empty" id="preview-empty">
+        <span class="preview-empty-emoji">📭</span>
+        <span class="preview-empty-text">这天还没有记录</span>
+      </div>
+      <div class="preview-list" id="preview-list"></div>
+      <div class="preview-detail-link" onclick="onGoToDetail()">
+        <span class="preview-detail-text">查看详情（导入/导出）→</span>
+      </div>
+    </div>
+
     <div class="legend">
       <div class="legend-title">状态说明：</div>
       <div class="legend-items" id="legend-items"></div>

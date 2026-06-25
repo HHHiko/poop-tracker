@@ -19,7 +19,7 @@
   <view class="calendar-grid">
     <view class="week-row" wx:for="{{weeks}}" wx:key="index">
       <view
-        class="day-cell {{item.month}} {{item.isToday ? 'today' : ''}} {{day.isPeriod ? 'period-day' : ''}} {{day.isPredicted ? 'period-predicted' : ''}}"
+        class="day-cell {{item.month}} {{item.isToday ? 'today' : ''}} {{day.isPeriod ? 'period-day' : ''}} {{day.isPredicted ? 'period-predicted' : ''}} {{selectedDate === day.dateStr ? 'selected' : ''}}"
         wx:for="{{item}}"
         wx:for-item="day"
         wx:key="col"
@@ -45,6 +45,47 @@
         <!-- 预测经期：虚线横条 -->
         <view class="period-predicted-bar" wx:if="{{day.isPredicted}}"></view>
       </view>
+    </view>
+  </view>
+
+  <!-- ====== 日预览面板 ====== -->
+  <view class="day-preview" wx:if="{{selectedDate}}">
+    <!-- 头部 -->
+    <view class="preview-header">
+      <view class="preview-close" bindtap="onDeselectDate" hover-class="preview-close-pressed">✕</view>
+      <text class="preview-date">📅 {{selectedDate}}</text>
+      <text class="preview-hint">点击日期切换</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="preview-empty" wx:if="{{previewRecords.length === 0}}">
+      <text class="preview-empty-emoji">📭</text>
+      <text class="preview-empty-text">这天还没有记录</text>
+    </view>
+
+    <!-- 记录列表 -->
+    <view class="preview-list" wx:else>
+      <view class="preview-item" wx:for="{{previewRecords}}" wx:key="id">
+        <view class="preview-item-left">
+          <view class="preview-dot" style="background-color: {{stoolTypes[item.stoolType - 1].color}};"></view>
+          <text class="preview-time">{{item.time}}</text>
+        </view>
+        <view class="preview-item-mid">
+          <image class="preview-icon" src="{{stoolTypes[item.stoolType - 1].icon}}" mode="aspectFit"></image>
+          <text class="preview-type">{{stoolTypes[item.stoolType - 1].name}}</text>
+        </view>
+        <view class="preview-item-right">
+          <text class="preview-note" wx:if="{{item.note}}">{{item.note}}</text>
+        </view>
+        <view class="preview-delete-btn" data-id="{{item.id}}" catchtap="onPreviewDelete" hover-class="preview-delete-btn-pressed">
+          <text class="preview-delete-icon">🗑</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 跳转完整详情页 -->
+    <view class="preview-detail-link" bindtap="onGoToDetail" hover-class="preview-detail-link-pressed">
+      <text class="preview-detail-text">查看详情（导入/导出）→</text>
     </view>
   </view>
 

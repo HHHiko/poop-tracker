@@ -7,9 +7,11 @@ Page({
     year: 2026,
     month: 6,
     weekdays: ['日', '一', '二', '三', '四', '五', '六'],
-    weeks: [],        // 6行×7列 的日历数据
-    stoolTypes: [],   // 从 globalData 获取
-    prediction: null  // 预测结果
+    weeks: [],           // 6行×7列 的日历数据
+    stoolTypes: [],      // 从 globalData 获取
+    prediction: null,    // 预测结果
+    selectedDate: '',    // 当前选中的日期 YYYY-MM-DD
+    previewRecords: []   // 选中日期的记录列表
   },
 
   onLoad() {
@@ -39,7 +41,7 @@ Page({
     var y = this.data.year;
     var m = this.data.month - 1;
     if (m === 0) { y--; m = 12; }
-    this.setData({ year: y, month: m });
+    this.setData({ year: y, month: m, selectedDate: '', previewRecords: [] });
     this._renderCalendar();
   },
 
@@ -47,16 +49,57 @@ Page({
     var y = this.data.year;
     var m = this.data.month + 1;
     if (m === 13) { y++; m = 1; }
-    this.setData({ year: y, month: m });
+    this.setData({ year: y, month: m, selectedDate: '', previewRecords: [] });
     this._renderCalendar();
   },
 
-  // ====== 点击日期 ======
+  // ====== 点击日期 → 展开/切换预览面板 ======
   onDayTap(e) {
     var item = e.currentTarget.dataset.item;
-    if (!item || item.month !== 'current') return; // 不响应上月/下月填充日期
+    if (!item || item.month !== 'current') return;
     var dateStr = this._formatDate(new Date(this.data.year, this.data.month - 1, item.day));
-    wx.navigateTo({ url: '/pages/detail/detail?date=' + dateStr });
+
+    // 点击同一日期 → 收起面板
+    if (dateStr === this.data.selectedDate) {
+      this.setData({ selectedDate: '', previewRecords: [] });
+      return;
+    }
+
+    // 点击不同日期 → 切换预览
+    var records = storage.getRecordsByDate(dateStr);
+    this.setData({ selectedDate: dateStr, previewRecords: records });
+  },
+
+  // ====== 关闭预览面板 ======
+  onDeselectDate() {
+    this.setData({ selectedDate: '', previewRecords: [] });
+  },
+
+  // ====== 预览面板内删除记录 ======
+  onPreviewDelete(e) {
+    var id = e.currentTarget.dataset.id;
+    var that = this;
+    wx.showModal({
+      title: '确认删除',
+      content: '删除后无法恢复，确定吗？',
+      confirmColor: '#EF5350',
+      success: function (res) {
+        if (res.confirm) {
+          storage.deleteRecord(id);
+          wx.showToast({ title: '已删除', icon: 'success', duration: 1200 });
+          // 刷新预览面板
+          var records = storage.getRecordsByDate(that.data.selectedDate);
+          that.setData({ previewRecords: records });
+          // 刷新日历标记点
+          that._renderCalendar();
+        }
+      }
+    });
+  },
+
+  // ====== 跳转完整详情页（导入/导出） ======
+  onGoToDetail() {
+    wx.navigateTo({ url: '/pages/detail/detail?date=' + this.data.selectedDate });
   },
 
   // ====== 核心：渲染日历 ======

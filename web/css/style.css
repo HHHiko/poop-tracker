@@ -34,7 +34,7 @@ html, body {
   padding-bottom: 80px; /* 给底部导航留空间 */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 #view-detail {
@@ -245,6 +245,14 @@ html, body {
   background-color: #D7CCC8;
 }
 
+.day-cell.selected {
+  background-color: #A1887F;
+}
+.day-cell.selected .day-num {
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
 .day-num {
   font-size: 14px;
   color: #2C2C2C;
@@ -286,6 +294,185 @@ html, body {
   border-radius: 2px;
   margin-top: 3px;
   background: repeating-linear-gradient(90deg, #F48FB1 0px, #F48FB1 4px, transparent 4px, transparent 7px);
+}
+
+/* ====== 日预览面板 ====== */
+.day-preview {
+  margin-top: 14px;
+  background: #FFFFFF;
+  border: 2px solid #2C2C2C;
+  border-radius: 10px;
+  padding: 14px;
+  box-shadow: 3px 3px 0 #2C2C2C;
+  animation: previewSlideIn 0.2s ease-out;
+}
+@keyframes previewSlideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 预览头部 */
+.preview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E8E8E8;
+}
+.preview-close {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+  font-weight: bold;
+  background: #FFF;
+  border: 2px solid #2C2C2C;
+  border-radius: 6px;
+  box-shadow: 2px 2px 0 #2C2C2C;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.preview-close:active {
+  background: #F0F0F0;
+  box-shadow: 1px 1px 0 #2C2C2C;
+  transform: translate(1px, 1px);
+}
+.preview-date {
+  flex: 1;
+  font-size: 17px;
+  font-weight: bold;
+  color: #2C2C2C;
+}
+.preview-hint {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 预览空状态 */
+.preview-empty {
+  text-align: center;
+  padding: 20px 0;
+}
+.preview-empty-emoji {
+  font-size: 44px;
+  display: block;
+  margin-bottom: 10px;
+}
+.preview-empty-text {
+  font-size: 15px;
+  color: #666;
+  font-weight: bold;
+}
+
+/* 预览记录列表 */
+.preview-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* 预览记录项 */
+.preview-item {
+  display: flex;
+  align-items: center;
+  background: #FAFAFA;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.preview-item-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 40px;
+}
+.preview-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 2px solid #2C2C2C;
+}
+.preview-time {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2C2C2C;
+}
+.preview-item-mid {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+}
+.preview-icon {
+  width: 28px;
+  height: 28px;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+.preview-type {
+  font-size: 14px;
+  font-weight: bold;
+  color: #2C2C2C;
+}
+.preview-item-right {
+  max-width: 120px;
+  flex: 1;
+}
+.preview-note {
+  font-size: 12px;
+  color: #666;
+  word-break: break-all;
+}
+
+/* 预览删除按钮 */
+.preview-delete-btn {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  background: #EF5350;
+  border: 2px solid #2C2C2C;
+  border-radius: 6px;
+  box-shadow: 2px 2px 0 #2C2C2C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.preview-delete-btn:active {
+  background: #C62828;
+  box-shadow: 1px 1px 0 #2C2C2C;
+  transform: translate(1px, 1px);
+}
+.preview-delete-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* 跳转详情链接 */
+.preview-detail-link {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #E8E8E8;
+  text-align: center;
+  cursor: pointer;
+}
+.preview-detail-link:active {
+  opacity: 0.7;
+}
+.preview-detail-text {
+  font-size: 14px;
+  color: #A1887F;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 /* 图例 */

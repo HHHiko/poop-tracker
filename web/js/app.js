@@ -18,6 +18,7 @@ var state = {
   year: 0,
   month: 0,
   prediction: null,
+  selectedDate: '',        // 日历中选中的日期
   // 记录
   recordDate: '',
   selectedType: 0,
@@ -246,6 +247,7 @@ function _renderCalendarDOM() {
 
         var dateStr = formatDate(new Date(y, m - 1, dayCounter));
         content += barHtml;
+        if (dateStr === state.selectedDate) cellClass += ' selected';
         html += '<div class="' + cellClass + '" data-date="' + dateStr + '" onclick="onCalendarDayTap(\'' + dateStr + '\')">' + content + '</div>';
         dayCounter++;
         continue;
@@ -272,19 +274,33 @@ function _renderLegend() {
 }
 
 function onCalendarDayTap(dateStr) {
-  navigateTo('detail', { date: dateStr });
+  // 点击同一日期 → 收起面板
+  if (dateStr === state.selectedDate) {
+    state.selectedDate = '';
+    _updateCalendarSelection();
+    _renderPreviewPanel();
+    return;
+  }
+  // 点击不同日期 → 切换预览
+  state.selectedDate = dateStr;
+  _updateCalendarSelection();
+  _renderPreviewPanel();
 }
 
 function goPrevMonth() {
   state.month--;
   if (state.month === 0) { state.year--; state.month = 12; }
+  state.selectedDate = '';
   _renderCalendarDOM();
+  _renderPreviewPanel();
 }
 
 function goNextMonth() {
   state.month++;
   if (state.month === 13) { state.year++; state.month = 1; }
+  state.selectedDate = '';
   _renderCalendarDOM();
+  _renderPreviewPanel();
 }
 
 // ====== 记录页 ======
@@ -440,6 +456,72 @@ function onDeleteRecord(id) {
     showToast('已删除', 'success', 1200);
     _renderDetailDOM();
   });
+}
+
+// ====== 日历预览面板 ======
+function onDeselectDate() {
+  state.selectedDate = '';
+  _updateCalendarSelection();
+  _renderPreviewPanel();
+}
+
+function _updateCalendarSelection() {
+  // 清除旧选中
+  var prev = document.querySelector('.day-cell.selected');
+  if (prev) prev.classList.remove('selected');
+  // 设置新选中
+  if (state.selectedDate) {
+    var cell = document.querySelector('.day-cell[data-date="' + state.selectedDate + '"]');
+    if (cell) cell.classList.add('selected');
+  }
+}
+
+function _renderPreviewPanel() {
+  var panel = document.getElementById('day-preview');
+  var dateText = document.getElementById('preview-date-text');
+  var listEl = document.getElementById('preview-list');
+  var emptyEl = document.getElementById('preview-empty');
+
+  if (!state.selectedDate) {
+    panel.style.display = 'none';
+    return;
+  }
+
+  panel.style.display = '';
+  dateText.textContent = '📅 ' + state.selectedDate;
+
+  var records = storage.getRecordsByDate(state.selectedDate);
+
+  if (records.length === 0) {
+    emptyEl.style.display = '';
+    listEl.innerHTML = '';
+  } else {
+    emptyEl.style.display = 'none';
+    var html = '';
+    records.forEach(function (r) {
+      var t = stoolTypes[r.stoolType - 1] || { color: '#999', img: '', name: '未知' };
+      html += '<div class="preview-item" data-id="' + r.id + '">' +
+        '<div class="preview-item-left"><span class="preview-dot" style="background:' + t.color + '"></span><span class="preview-time">' + r.time + '</span></div>' +
+        '<div class="preview-item-mid"><img class="preview-icon" src="' + t.img + '" alt="' + t.name + '"><span class="preview-type">' + t.name + '</span></div>' +
+        '<div class="preview-item-right">' + (r.note ? '<span class="preview-note">' + r.note + '</span>' : '') + '</div>' +
+        '<div class="preview-delete-btn" onclick="event.stopPropagation();onPreviewDelete(\'' + r.id + '\')"><span class="preview-delete-icon">🗑</span></div>' +
+      '</div>';
+    });
+    listEl.innerHTML = html;
+  }
+}
+
+function onPreviewDelete(id) {
+  showModal('确认删除', '删除后无法恢复，确定吗？', '删除', '取消', function () {
+    storage.deleteRecord(id);
+    showToast('已删除', 'success', 1200);
+    _renderPreviewPanel();
+    _renderCalendarDOM();
+  });
+}
+
+function onGoToDetail() {
+  navigateTo('detail', { date: state.selectedDate });
 }
 
 // ====== 导出 ======
