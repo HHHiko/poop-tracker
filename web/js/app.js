@@ -357,11 +357,10 @@ function _renderRecordDOM() {
   document.getElementById('note-input').value = state.note;
 }
 
-// ====== 总记录数圆点 ======
+// ====== 今日记录数圆点 ======
 function _renderPoopCounter() {
-  var records = storage.getAllRecords();
+  var records = storage.getRecordsByDate(state.recordDate);
   var count = records.length;
-  var MAX_DOTS = 100;
 
   document.getElementById('counter-num').textContent = count + ' 次';
 
@@ -377,21 +376,14 @@ function _renderPoopCounter() {
   }
 
   emptyEl.style.display = 'none';
-  var max = Math.min(count, MAX_DOTS);
+  overflowEl.style.display = 'none';
   var html = '';
-  for (var i = 0; i < max; i++) {
+  for (var i = 0; i < count; i++) {
     var t = (stoolTypes[records[i].stoolType - 1] || {});
     var color = t.color || '#A1887F';
     html += '<span class="poop-dot" style="background:' + color + '"></span>';
   }
   dotGrid.innerHTML = html;
-
-  if (count > MAX_DOTS) {
-    overflowEl.style.display = '';
-    overflowEl.textContent = '…还有 ' + (count - MAX_DOTS) + ' 条记录未显示';
-  } else {
-    overflowEl.style.display = 'none';
-  }
 }
 
 function onTypeSelect(value) {
