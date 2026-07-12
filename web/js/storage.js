@@ -66,9 +66,8 @@ function getDateSummary(year, month) {
   records.forEach(function (r) {
     var day = r.date.slice(-2);
     if (!summary[day]) summary[day] = [];
-    if (summary[day].indexOf(r.stoolType) === -1) {
-      summary[day].push(r.stoolType);
-    }
+    // 每条记录对应一个点，不去重
+    summary[day].push(r.stoolType);
   });
   return summary;
 }

@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="便便记录">
   <meta name="theme-color" content="#A1887F">
   <title>便便记录助手</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=4">
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
@@ -62,6 +62,18 @@
   <div class="view" id="view-record">
     <!-- ★ 改为记录页优先，去掉 display:none -->
     <div class="date-label" id="rec-date">📅 2026-06-03</div>
+
+    <!-- 总记录计数 — 每一条记录一个圆点 -->
+    <div class="poop-counter" id="poop-counter">
+      <div class="counter-header">
+        <span class="counter-icon">💩</span>
+        <span class="counter-title">历史总记录</span>
+        <span class="counter-num" id="counter-num">0 次</span>
+      </div>
+      <div class="dot-grid" id="dot-grid"></div>
+      <div class="counter-empty" id="counter-empty">还没有记录，快来记录第一次吧 👆</div>
+      <div class="counter-overflow" id="counter-overflow" style="display:none"></div>
+    </div>
 
     <div class="section">
       <div class="section-title">记录类型</div>
@@ -170,8 +182,8 @@
 
 </div>
 
-<script src="js/storage.js"></script>
-<script src="js/app.js"></script>
+<script src="js/storage.js?v=4"></script>
+<script src="js/app.js?v=4"></script>
 <script>
   // 注册 Service Worker
   if ('serviceWorker' in navigator) {

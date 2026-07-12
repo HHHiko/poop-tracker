@@ -60,7 +60,7 @@ function getRecordsByMonth(year, month) {
  * 获取某月每日便便类型摘要（用于月历标记圆点）
  * @param {number} year
  * @param {number} month
- * @returns {Object} { "01": [1,3], "02": [2], ... } key=日期(DD)，value=便便类型数组(去重)
+ * @returns {Object} { "01": [1,3,1], "02": [2], ... } key=日期(DD)，value=便便类型数组(不去重，每条记录一个)
  */
 function getDateSummary(year, month) {
   var records = getRecordsByMonth(year, month);
@@ -70,10 +70,8 @@ function getDateSummary(year, month) {
     if (!summary[day]) {
       summary[day] = [];
     }
-    // 去重：同一天同类型只记一次
-    if (summary[day].indexOf(r.stoolType) === -1) {
-      summary[day].push(r.stoolType);
-    }
+    // 每条记录对应一个点，不去重
+    summary[day].push(r.stoolType);
   });
   return summary;
 }

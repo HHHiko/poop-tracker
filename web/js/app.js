@@ -176,6 +176,12 @@ function _renderCalendarDOM() {
   document.getElementById('cal-title').textContent = y + '年 ' + m + '月';
 
   var summary = storage.getDateSummary(y, m);
+  // 调试日志：打印每天的点数
+  var keys = Object.keys(summary);
+  if (keys.length > 0) {
+    var detail = keys.map(function(k) { return k + '(' + summary[k].length + '点)'; }).join(', ');
+    console.log('[月历] ' + y + '年' + m + '月 有记录的日期：' + detail);
+  }
   var periodDays = storage.getPeriodDaysByMonth(y, m);
   var periodSet = {};
   periodDays.forEach(function (d) { periodSet[d.slice(-2)] = true; });
@@ -232,7 +238,7 @@ function _renderCalendarDOM() {
 
         content = '<span class="day-num">' + dayCounter + '</span>';
 
-        // 便便标记方块（像素画缩略图）
+        // 便便标记方块 + 数字
         if (daySummary.length > 0) {
           content += '<div class="dots-row">';
           daySummary.forEach(function (t) {
@@ -240,6 +246,8 @@ function _renderCalendarDOM() {
             content += '<span class="dot" style="background:' + c + '"></span>';
           });
           content += '</div>';
+          // 显示次数数字
+          content += '<span class="dot-count">×' + daySummary.length + '</span>';
         }
 
         if (isPeriod) barHtml = '<div class="period-bar"></div>';
@@ -321,6 +329,7 @@ function _initRecord(params) {
 function _renderRecordDOM() {
   document.getElementById('rec-date').textContent = state.recordDate;
   document.getElementById('time-input').value = state.selectedTime || '';
+  _renderPoopCounter();
 
   // 渲染类型卡片 — 使用像素画图标
   var cardsHtml = '';
@@ -346,6 +355,43 @@ function _renderRecordDOM() {
   document.getElementById('note-area').style.display = state.showNote ? '' : 'none';
   document.getElementById('note-toggle-text').textContent = state.showNote ? '📝 备注（点击收起 ▲）' : '📝 添加备注（可选 ▼）';
   document.getElementById('note-input').value = state.note;
+}
+
+// ====== 总记录数圆点 ======
+function _renderPoopCounter() {
+  var records = storage.getAllRecords();
+  var count = records.length;
+  var MAX_DOTS = 100;
+
+  document.getElementById('counter-num').textContent = count + ' 次';
+
+  var dotGrid = document.getElementById('dot-grid');
+  var emptyEl = document.getElementById('counter-empty');
+  var overflowEl = document.getElementById('counter-overflow');
+
+  if (count === 0) {
+    dotGrid.innerHTML = '';
+    emptyEl.style.display = '';
+    overflowEl.style.display = 'none';
+    return;
+  }
+
+  emptyEl.style.display = 'none';
+  var max = Math.min(count, MAX_DOTS);
+  var html = '';
+  for (var i = 0; i < max; i++) {
+    var t = (stoolTypes[records[i].stoolType - 1] || {});
+    var color = t.color || '#A1887F';
+    html += '<span class="poop-dot" style="background:' + color + '"></span>';
+  }
+  dotGrid.innerHTML = html;
+
+  if (count > MAX_DOTS) {
+    overflowEl.style.display = '';
+    overflowEl.textContent = '…还有 ' + (count - MAX_DOTS) + ' 条记录未显示';
+  } else {
+    overflowEl.style.display = 'none';
+  }
 }
 
 function onTypeSelect(value) {
@@ -387,6 +433,7 @@ function onSaveRecord() {
     note: state.note
   });
 
+  _renderPoopCounter();
   showToast('记录成功！', 'success', 1500);
   setTimeout(function () { goBack(); }, 800);
 }

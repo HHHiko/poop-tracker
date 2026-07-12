@@ -128,15 +128,16 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 4rpx;
+  gap: 5rpx;
   margin-top: 4rpx;
-  max-width: 80%;
+  max-width: 85%;
 }
 .dot {
-  width: 12rpx;
-  height: 12rpx;
+  width: 10rpx;
+  height: 10rpx;
   border-radius: 2rpx;
-  border: 1rpx solid rgba(0,0,0,0.3);
+  border: 1.5rpx solid rgba(44, 44, 44, 0.5);
+  flex-shrink: 0;
 }
 
 /* ====== 经期标记 ====== */

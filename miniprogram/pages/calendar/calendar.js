@@ -191,10 +191,13 @@ Page({
       prediction: prediction
     });
 
-    // 构建月份摘要文本（调试用，可删除）
+    // 构建月份摘要文本（调试用）
     var hasData = Object.keys(summary).length;
     if (hasData > 0) {
-      console.log('[月历] ' + y + '年' + m + '月 有记录的日期：', Object.keys(summary).join(', '));
+      var detail = Object.keys(summary).map(function(k) {
+        return k + '(' + summary[k].length + '点)';
+      }).join(', ');
+      console.log('[月历] ' + y + '年' + m + '月 有记录的日期：' + detail);
     }
   },
 

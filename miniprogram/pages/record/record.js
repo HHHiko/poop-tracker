@@ -14,7 +14,12 @@ Page({
     // 经期相关
     isPeriod: false,      // 当天是否为经期
     periodEmoji: '🩸',
-    periodName: '经期'
+    periodName: '经期',
+
+    // 总记录计数
+    totalCount: 0,        // 总记录条数
+    poops: [],            // 每条记录对应的彩色圆点数据
+    MAX_DOTS: 100         // 最多显示 100 个圆点，超出显示数字
   },
 
   onLoad(options) {
@@ -43,8 +48,36 @@ Page({
   },
 
   onShow() {
-    // 每次进入记录页时刷新经期状态
+    // 每次进入记录页时刷新经期状态 + 总记录计数
     this.setData({ isPeriod: storage.isPeriodDay(this.data.recordDate) });
+    this._updatePoopCounter();
+  },
+
+  // ====== 更新总记录计数和圆点 ======
+  _updatePoopCounter() {
+    var records = storage.getAllRecords();
+    var count = records.length;
+    var poops = [];
+
+    // 构建颜色映射
+    var colorMap = {};
+    var types = this.data.stoolTypes || app.globalData.stoolTypes;
+    types.forEach(function (t) {
+      colorMap[t.value] = t.color;
+    });
+
+    // 生成圆点数据（按记录顺序，最近的在前面）
+    var max = Math.min(count, this.data.MAX_DOTS);
+    for (var i = 0; i < max; i++) {
+      poops.push({
+        color: colorMap[records[i].stoolType] || '#A1887F'
+      });
+    }
+
+    this.setData({
+      totalCount: count,
+      poops: poops
+    });
   },
 
   // ====== 选择便便类型 ======
@@ -101,13 +134,16 @@ Page({
       note: this.data.note
     });
 
-    wx.showToast({ title: '记录成功！', icon: 'success', duration: 1500 });
+    // 保存后即时更新计数
+    this._updatePoopCounter();
+
+    wx.showToast({ title: '记录成功！🎉', icon: 'success', duration: 1500 });
 
     // 延迟返回，让用户看到成功提示
     var that = this;
     setTimeout(function () {
       wx.navigateBack({ delta: 1 });
-    }, 800);
+    }, 1000);
   },
 
   // ====== 工具 ======

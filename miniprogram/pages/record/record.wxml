@@ -4,6 +4,29 @@
   <!-- 日期显示 -->
   <view class="date-label">📅 {{recordDate}}</view>
 
+  <!-- 总记录计数 — 每一条记录一个圆点 -->
+  <view class="poop-counter">
+    <view class="counter-header">
+      <text class="counter-icon">💩</text>
+      <text class="counter-title">历史总记录</text>
+      <text class="counter-num">{{totalCount}} 次</text>
+    </view>
+    <view class="dot-grid" wx:if="{{poops.length > 0}}">
+      <view
+        class="dot"
+        wx:for="{{poops}}"
+        wx:key="index"
+        style="background-color: {{item.color}};"
+      ></view>
+    </view>
+    <view class="counter-empty" wx:elif="{{totalCount === 0}}">
+      <text class="empty-hint">还没有记录，快来记录第一次吧 👆</text>
+    </view>
+    <view class="counter-overflow" wx:if="{{totalCount > MAX_DOTS}}">
+      <text>…还有 {{totalCount - MAX_DOTS}} 条记录未显示</text>
+    </view>
+  </view>
+
   <!-- 类型选择：便便颜色 + 经期 -->
   <view class="section">
     <view class="section-title">记录类型</view>

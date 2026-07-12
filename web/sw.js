@@ -1,6 +1,6 @@
 // sw.js — Service Worker（离线缓存）
 
-var CACHE = 'poop-tracker-v2';
+var CACHE = 'poop-tracker-v4';
 var FILES = [
   './index.html',
   './css/style.css',

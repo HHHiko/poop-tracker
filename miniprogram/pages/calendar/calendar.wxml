@@ -29,13 +29,13 @@
         <!-- 日期数字 -->
         <text class="day-num {{day.month === 'current' ? '' : 'dimmed'}}">{{day.day}}</text>
 
-        <!-- 便便类型标记方块 -->
+        <!-- 便便类型标记方块（每条记录一个点） -->
         <view class="dots-row" wx:if="{{day.dots.length > 0}}">
           <view
             class="dot"
             wx:for="{{day.dots}}"
             wx:for-item="dot"
-            wx:key="dot"
+            wx:key="index"
             style="background-color: {{stoolTypes[dot - 1].color}};"
           ></view>
         </view>
